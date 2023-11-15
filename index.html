@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .login-form {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        input {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4caf50;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="login-form">
+            <h2>Login</h2>
+            <form onsubmit="checkPassword(event)">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <div class="error-message" id="errorMessage"></div>
+                <br>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        async function checkPassword(event) {
+            event.preventDefault();
+            const validCharacters = /^[ -~]+$/;
+            const inputPassword = document.getElementById('password').value;
+            
+            // Fetch the content of the text file (replace 'yourfile.txt' with the actual file path)
+            const response = await fetch('10-million-password-list-top-1000.txt');
+            const fileContent = await response.text();
+            const errorMessageElement = document.getElementById('errorMessage');
+            
+            // Check if the input password is at least 10 characters
+            if (inputPassword.length < 10) {
+                errorMessageElement.textContent = 'Password must be at least 10 characters.';
+                return; // Stop further execution
+            }
+            if (!validCharacters.test(inputPassword)) {
+                errorMessageElement.textContent = 'Invalid characters in the password.';
+                return; // Stop further execution
+            } else {
+                errorMessageElement.textContent = ''; // Clear any previous error message
+            }
+            // Check if the input password appears in the text file
+            if (fileContent.includes(inputPassword)) {
+                errorMessageElement.textContent = 'Password found in common passwords.';
+                return;
+            } else {
+                // Store the password in sessionStorage
+                sessionStorage.setItem('password', inputPassword);
+                // Replace 'welcome.html' with the actual path to your welcome page
+                window.location.href = 'welcome.html';
+            }
+        }
+    </script>
+</body>
+</html>
